@@ -1,4 +1,3 @@
-// Grab the things on the page that we need
 const form = document.getElementById("shorten-form");
 const errorBox = document.getElementById("error");
 const resultBox = document.getElementById("result");
@@ -6,12 +5,11 @@ const copyButton = document.getElementById("copy-btn");
 const feedbackForm = document.getElementById("feedback-form");
 
 
-// ---------- When the user clicks "Shorten link" ----------
-async function makeShortLink(event) {
-  event.preventDefault();               // stop the page from refreshing
-  errorBox.classList.add("hidden");     // hide old error
 
-  // collect what the user typed
+async function makeShortLink(event) {
+  event.preventDefault();               
+  errorBox.classList.add("hidden");     
+
   const dataToSend = {
     url: document.getElementById("url").value.trim(),
     password: document.getElementById("password").value,
@@ -19,7 +17,7 @@ async function makeShortLink(event) {
     owner: getOwner(),
   };
 
-  // send it to our Python server and wait for the reply
+  
   const response = await fetch("/api/shorten", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -27,14 +25,12 @@ async function makeShortLink(event) {
   });
   const result = await response.json();
 
-  // if Python said "no" (bad link, blocked link, etc.), show the error
+ 
   if (!response.ok) {
     errorBox.textContent = result.error;
     errorBox.classList.remove("hidden");
     return;
   }
-
-  // otherwise show the short link and the QR code
   const shortUrl = location.origin + "/" + result.code;
   document.getElementById("short-url").value = shortUrl;
   document.getElementById("qr-img").src = "/api/qr/" + result.code;
@@ -43,7 +39,7 @@ async function makeShortLink(event) {
 }
 
 
-// ---------- Copy button ----------
+
 function copyLink() {
   const shortUrl = document.getElementById("short-url").value;
   navigator.clipboard.writeText(shortUrl);
@@ -55,7 +51,7 @@ function copyLink() {
 }
 
 
-// ---------- Feedback / report form ----------
+
 async function sendFeedback(event) {
   event.preventDefault();
   const status = document.getElementById("fb-status");
@@ -82,7 +78,7 @@ async function sendFeedback(event) {
 }
 
 
-// ---------- Connect each function to its button/form ----------
+
 form.addEventListener("submit", makeShortLink);
 copyButton.addEventListener("click", copyLink);
 feedbackForm.addEventListener("submit", sendFeedback);
