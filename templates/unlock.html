@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protected link – LinkPulse</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="center-box card">
+    <a href="/" class="brand">Link<span>Pulse</span></a>
+    <h3 style="margin-top:16px">This link is password protected</h3>
+    <p class="muted" style="margin-bottom:16px">Enter the password to continue.</p>
+    <form id="unlock-form" class="form">
+      <input type="password" id="pw" placeholder="Password" required>
+      <button class="btn" type="submit">Unlock</button>
+      <p id="msg" class="error hidden"></p>
+    </form>
+  </div>
+
+  <script>
+    const code = location.pathname.split("/").pop();
+    document.getElementById("unlock-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const res = await fetch("/api/unlock/" + code, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: document.getElementById("pw").value, ref: document.referrer }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        location.href = data.url;
+      } else {
+        const msg = document.getElementById("msg");
+        msg.textContent = data.error;
+        msg.classList.remove("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

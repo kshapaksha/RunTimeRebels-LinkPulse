@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LinkPulse – Short links with security, analytics and control</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- 1. NAVBAR -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="brand">Link<span>Pulse</span></a>
+
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="#feedback">Feedback</a>
+      </nav>
+
+      <a href="/dashboard" class="btn btn-small">My links</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 2. HERO: shorten form + result -->
+    <section class="hero container">
+      <span class="pill">Safe · Private · Trackable</span>
+      <h1>Short links with <em>security</em>, analytics and control</h1>
+      <p class="sub">Paste a long link, protect it with a password, set an expiry, and watch the clicks come in.</p>
+
+      <!-- Shorten form -->
+      <form id="shorten-form" class="shorten-box">
+        <div class="row">
+          <input type="text" id="url" placeholder="Paste your long link here..." required>
+          <button type="submit" class="btn">Shorten link</button>
+        </div>
+
+        <div class="row options">
+          <input type="password" id="password" placeholder="Password (optional)">
+          <input type="date" id="expires" title="Expiry date (optional)">
+        </div>
+
+        <p id="error" class="error hidden"></p>
+      </form>
+
+      <!-- Result (hidden until a link is made) -->
+      <div id="result" class="result hidden">
+        <div class="row">
+          <input type="text" id="short-url" readonly>
+          <button id="copy-btn" class="btn">Copy</button>
+        </div>
+
+        <div class="qr-area">
+          <img id="qr-img" alt="QR code" width="130" height="130">
+          <a id="qr-download" class="btn btn-ghost" download="linkpulse-qr.png">Download QR (PNG)</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FEATURES (7 cards) -->
+    <section id="features" class="section container">
+      <h2>One platform. Seven powers.</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Password protected</h3>
+          <p>Only people with the password can open your link.</p>
+        </div>
+        <div class="card">
+          <h3>Set an expiry</h3>
+          <p>The link stops working after the date you choose.</p>
+        </div>
+        <div class="card">
+          <h3>Click count</h3>
+          <p>Every successful visit is counted.</p>
+        </div>
+        <div class="card">
+          <h3>Disable bad links</h3>
+          <p>Phishing and malware are blocked using Google Safe Browsing.</p>
+        </div>
+        <div class="card">
+          <h3>Analytics dashboard</h3>
+          <p>Clicks, devices, browsers, referrers and a top-countries leaderboard.</p>
+        </div>
+        <div class="card">
+          <h3>QR generator</h3>
+          <p>Download a QR code for every short link.</p>
+        </div>
+        <div class="card">
+          <h3>User feedback</h3>
+          <p>Visitors can rate a link or report it as unsafe.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. HOW IT WORKS (3 steps) -->
+    <section id="how" class="section container">
+      <h2>Three steps. That's it.</h2>
+
+      <div class="grid three">
+        <div class="card">
+          <span class="num">01</span>
+          <h3>Paste your link</h3>
+          <p>Drop in any long URL and get a short one back instantly.</p>
+        </div>
+        <div class="card">
+          <span class="num">02</span>
+          <h3>Make it yours</h3>
+          <p>Add a password or an expiry date if you want control.</p>
+        </div>
+        <div class="card">
+          <span class="num">03</span>
+          <h3>Share and track</h3>
+          <p>Share it anywhere, then watch the clicks in your dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FEEDBACK FORM -->
+    <section id="feedback" class="section container narrow">
+      <h2>Rate or report a link</h2>
+
+      <form id="feedback-form" class="card form">
+        <input type="text" id="fb-code" placeholder="Short code (e.g. aB3xYz)" required>
+
+        <select id="fb-type">
+          <option value="rating">Rate this link</option>
+          <option value="report">Report as unsafe</option>
+        </select>
+
+        <select id="fb-rating">
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★</option>
+          <option value="3">★★★</option>
+          <option value="2">★★</option>
+          <option value="1">★</option>
+        </select>
+
+        <textarea id="fb-message" rows="3" placeholder="Tell us more (optional)"></textarea>
+
+        <button class="btn" type="submit">Send</button>
+        <p id="fb-status" class="muted"></p>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- 6. FOOTER -->
+  <footer class="footer">
+    <div class="container">© 2026 LinkPulse · Run Time Rebels · Graphic Era Hill University</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
