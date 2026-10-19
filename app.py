@@ -9,11 +9,17 @@ from urllib.parse import urlparse
 
 import qrcode
 import requests
-from flask import Flask, jsonify, redirect, request, send_file
+from flask import Flask, jsonify, redirect, request, send_file, render_template
 from user_agents import parse as parse_ua
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static"),
+)
 
 
 
@@ -166,17 +172,17 @@ def log_click(link, ref=None):
 
 @app.route("/")
 def home():
-    return app.send_static_file("index.html")
+    return render_template("index.html")
 
 
 @app.route("/dashboard")
 def dashboard():
-    return app.send_static_file("dashboard.html")
+    return render_template("dashboard.html")
 
 
 @app.route("/unlock/<code>")
 def unlock_page(code):
-    return app.send_static_file("unlock.html")
+    return render_template("unlock.html")
 
 
 
