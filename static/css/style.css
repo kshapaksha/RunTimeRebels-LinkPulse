@@ -853,8 +853,42 @@ a:focus-visible {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* ========================================
+   ANIMATIONS
+======================================== */
 
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #087F5B, #34D399);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+@keyframes brandGlow {
+    to { background-position: 200% center; }
+}
+
+@keyframes cinematicReveal {
+    from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes ambientFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
@@ -862,53 +896,103 @@ a:focus-visible {
         transition: none !important;
         animation: none !important;
     }
+}
 
-    .card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: linear-gradient(90deg, #087F5B, #34D399);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.35s ease;
-    }
+/* ========================================
+   THEME BUTTON
+======================================== */
 
-    .card:hover::before {
-        transform: scaleX(1);
-    }
+.theme-btn {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
 
-    @keyframes brandGlow {
-        to {
-            background-position: 200% center;
-        }
-    }
+.theme-btn:hover {
+    border-color: var(--accent);
+}
 
-    @keyframes cinematicReveal {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-            filter: blur(5px);
-        }
+/* ========================================
+   DARK MODE FIXES
+   (these replace the hard-coded light colors)
+======================================== */
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-        }
-    }
+[data-theme="dark"] .nav {
+    background: rgba(11, 18, 14, 0.9);
+}
 
-    @keyframes ambientFloat {
+[data-theme="dark"] .btn-ghost {
+    background: var(--card);
+    border-color: #2A4A3A;
+}
 
-        0%,
-        100% {
-            transform: translateY(0);
-        }
+[data-theme="dark"] .btn-ghost:hover {
+    background: var(--accent-light);
+}
 
-        50% {
-            transform: translateY(12px);
-        }
-    }
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: #0F1813;
+    border-color: #2A3B32;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--muted);
+}
+
+[data-theme="dark"] .options input {
+    background: #0F1813;
+}
+
+[data-theme="dark"] .pill {
+    background: var(--accent-light);
+    border-color: #1F4A36;
+    color: var(--accent);
+}
+
+[data-theme="dark"] .shorten-box,
+[data-theme="dark"] .result {
+    background: var(--card);
+    border-color: var(--line);
+}
+
+[data-theme="dark"] .card:hover {
+    border-color: #2F6B4F;
+}
+
+[data-theme="dark"] .footer,
+[data-theme="dark"] .stat,
+[data-theme="dark"] .center-box {
+    background: var(--card);
+}
+
+[data-theme="dark"] .table th {
+    background: #16241C;
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+    background: #162219;
+}
+
+[data-theme="dark"] .bar {
+    background: #1C2B22;
+}
+
+[data-theme="dark"] .badge.ok {
+    color: var(--accent);
+    background: var(--accent-light);
+    border-color: #1F4A36;
+}
+
+[data-theme="dark"] .badge.bad {
+    background: #2A1517;
+    border-color: #5B2328;
+    color: #F87171;
 }
