@@ -6,47 +6,16 @@
     --bg: #F6F9F6;
     --card: #FFFFFF;
     --line: #E3EBE4;
+
     --text: #14251A;
     --muted: #6B7C70;
+
     --accent: #087F5B;
     --accent2: #34D399;
     --accent-light: #E7F7EE;
-    --shadow: 0 12px 35px rgba(19, 55, 32, 0.07);
 
-    /* new ones (these were hard-coded before) */
-    --nav-bg: rgba(255, 255, 255, 0.92);
-    --input-bg: #FFFFFF;
-    --input-alt: #F9FBF9;
-    --input-border: #DCE6DE;
-    --ghost-border: #BBDCC9;
-    --pill-border: #CBE9D5;
-    --hover-line: #A8D9B8;
-    --table-head: #F2F7F3;
-    --table-hover: #F5FAF6;
-    --bar-track: #E8F0EA;
-}
-
-[data-theme="dark"] {
-    --bg: #0B120E;
-    --card: #121C16;
-    --line: #22312A;
-    --text: #E8F3EC;
-    --muted: #8FA596;
-    --accent: #34D399;
-    --accent2: #10B981;
-    --accent-light: #123325;
-    --shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-
-    --nav-bg: rgba(11, 18, 14, 0.9);
-    --input-bg: #0F1813;
-    --input-alt: #0F1813;
-    --input-border: #2A3B32;
-    --ghost-border: #2A4A3A;
-    --pill-border: #1F4A36;
-    --hover-line: #2F6B4F;
-    --table-head: #16241C;
-    --table-hover: #162219;
-    --bar-track: #1C2B22;
+    --shadow:
+        0 12px 35px rgba(19, 55, 32, 0.07);
 }
 
 * {
@@ -114,7 +83,7 @@ textarea {
     top: 0;
     z-index: 100;
 
-    background: var(--nav-bg);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(16px);
 
     border-bottom: 1px solid var(--line);
@@ -210,9 +179,9 @@ textarea {
 }
 
 .btn-ghost {
-    background: var(--card);
+    background: #FFFFFF;
     color: var(--accent);
-    border: 1px solid var(--ghost-border);
+    border: 1px solid #BBDCC9;
     box-shadow: none;
 }
 
@@ -221,20 +190,6 @@ textarea {
     box-shadow: none;
 }
 
-.theme-btn {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    width: 40px;
-    height: 40px;
-    font-size: 17px;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-}
-
-.theme-btn:hover {
-    border-color: var(--accent);
-}
 /* ========================================
    INPUTS
 ======================================== */
@@ -244,10 +199,10 @@ select,
 textarea {
     width: 100%;
 
-    background: var(--input-bg);
+    background: #FFFFFF;
     color: var(--text);
 
-    border: 1px solid var(--input-border);
+    border: 1px solid #DCE6DE;
     border-radius: 11px;
 
     padding: 14px 16px;
@@ -262,7 +217,7 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-    color: var(--muted);
+    color: #91A096;
 }
 
 input:focus,
@@ -322,9 +277,9 @@ textarea:focus {
     border: 1px solid #CBE9D5;
     border-radius: 999px;
 
-    background: var(--accent-light);
+    background: rgba(231, 247, 238, 0.9);
 
-    color: var(--accent);
+    color: #087F5B;
 
     font-size: 12px;
     font-weight: 750;
@@ -382,9 +337,9 @@ textarea:focus {
     margin: 0 auto 22px;
     padding: 23px;
 
-    background: var(--card);
+    background: rgba(255, 255, 255, 0.96);
 
-    border: var(--line);
+    border: 1px solid #DDE9DF;
     border-radius: 19px;
 
     text-align: left;
@@ -413,7 +368,7 @@ textarea:focus {
 }
 
 .options input {
-    background: var(--input-bg);
+    background: #F9FBF9;
 }
 
 .error {
@@ -499,7 +454,7 @@ textarea:focus {
 .card:hover {
     transform: translateY(-5px);
 
-    border-color: var(--hover-line);
+    border-color: #A8D9B8;
 
     box-shadow: var(--shadow);
 }
@@ -564,7 +519,7 @@ textarea:focus {
 
     text-align: center;
 
-    background: var(--card);
+    background: #FFFFFF;
 
     color: var(--muted);
     font-size: 13px;
@@ -614,7 +569,7 @@ main.container>.card {
 
     font-weight: 700;
 
-    background: var(--table-head);
+    background: #F2F7F3;
 }
 
 .table tbody tr {
@@ -622,7 +577,7 @@ main.container>.card {
 }
 
 .table tbody tr:hover {
-    background: var(--table-hover);
+    background: #F5FAF6;
 }
 
 .table td.long {
@@ -648,9 +603,9 @@ main.container>.card {
 }
 
 .badge.ok {
-    color: var(--accent);
-    background: var(--accent-light);
-    border-color: var(--line);
+    color: #087F5B;
+    background: #E7F7EE;
+    border-color: #C5EBD2;
 }
 
 .badge.bad {
@@ -681,7 +636,7 @@ main.container>.card {
 }
 
 .stat {
-    background: var(--card);
+    background: #FFFFFF;
 
     border: 1px solid var(--line);
     border-radius: 16px;
@@ -728,7 +683,7 @@ main.container>.card {
     overflow: hidden;
 
     border-radius: 999px;
-    background: var(--bar-track);
+    background: #E8F0EA;
 }
 
 .bar>i {
@@ -756,7 +711,7 @@ main.container>.card {
 
     text-align: center;
 
-    background: var(--card);
+    background: #FFFFFF;
 
     border: 1px solid var(--line);
     border-radius: 20px;
@@ -876,6 +831,7 @@ a:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -883,35 +839,53 @@ a:focus-visible {
         transition: none !important;
         animation: none !important;
     }
-}
 
-.card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, #087F5B, #34D399);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.35s ease;
-}
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #087F5B, #34D399);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.35s ease;
+    }
 
-.card:hover::before {
-    transform: scaleX(1);
-}
+    .card:hover::before {
+        transform: scaleX(1);
+    }
 
-@keyframes brandGlow {
-    to { background-position: 200% center; }
-}
+    @keyframes brandGlow {
+        to {
+            background-position: 200% center;
+        }
+    }
 
-@keyframes cinematicReveal {
-    from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
-    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
+    @keyframes cinematicReveal {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+            filter: blur(5px);
+        }
 
-@keyframes ambientFloat {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(12px); }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+    }
+
+    @keyframes ambientFloat {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(12px);
+        }
+    }
 }
