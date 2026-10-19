@@ -138,7 +138,7 @@ async function showStats(code, shortUrl) {
   }
   document.getElementById("s-rating").textContent = rating;
 
-  // draw all the bar lists
+ 
   drawBars("b-countries", stats.countries);
   drawBars("b-referrers", stats.referrers);
   drawBars("b-devices", stats.devices);
