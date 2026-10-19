@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Protected link – LinkPulse</title>
   <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+  document.documentElement.setAttribute("data-theme", localStorage.getItem("lp_theme") || "light");
+</script>
 </head>
 <body>
   <div class="center-box card">
@@ -18,24 +21,35 @@
     </form>
   </div>
 
-  <script>
-    const code = location.pathname.split("/").pop();
-    document.getElementById("unlock-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const res = await fetch("/api/unlock/" + code, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: document.getElementById("pw").value, ref: document.referrer }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        location.href = data.url;
-      } else {
-        const msg = document.getElementById("msg");
-        msg.textContent = data.error;
-        msg.classList.remove("hidden");
-      }
+<script>
+  const code = location.pathname.split("/").pop();
+  const unlockForm = document.getElementById("unlock-form");
+
+  async function checkPassword(event) {
+    event.preventDefault();
+
+    const dataToSend = {
+      password: document.getElementById("pw").value,
+      ref: document.referrer,
+    };
+
+    const response = await fetch("/api/unlock/" + code, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
     });
-  </script>
+    const result = await response.json();
+
+    if (response.ok) {
+      location.href = result.url;       
+    } else {
+      const message = document.getElementById("msg");
+      message.textContent = result.error;
+      message.classList.remove("hidden");
+    }
+  }
+
+  unlockForm.addEventListener("submit", checkPassword);
+</script>
 </body>
 </html>

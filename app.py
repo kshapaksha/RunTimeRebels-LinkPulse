@@ -16,7 +16,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 
 
-DB_FILE = "data.json"
+
+if os.environ.get("VERCEL"):
+    DB_FILE = "/tmp/data.json"
+else:
+    DB_FILE = "data.json"
 
 SAFE_BROWSING_KEY = os.environ.get("SAFE_BROWSING_KEY")
 
@@ -135,7 +139,8 @@ def log_click(link, ref=None):
         device = "Desktop"
 
   
-    ip = request.remote_addr
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr)
+    ip = ip.split(",")[0].strip()
 
    
     if ref == None:

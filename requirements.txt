@@ -1,4 +1,4 @@
 flask
 qrcode[pil]
 user-agents
-request
+requests
