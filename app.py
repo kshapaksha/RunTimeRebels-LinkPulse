@@ -410,6 +410,26 @@ def feedback():
     save_db()
     return jsonify(ok=True)
 
+@app.route("/api/site-feedback", methods=["POST"])
+def site_feedback():
+    data = request.get_json()
+    message = data["message"].strip()
+
+    if message == "":
+        return jsonify(error="Please write something."), 400
+
+   
+    if "site_feedback" not in db:
+        db["site_feedback"] = []
+
+    item = {
+        "rating": data["rating"],
+        "message": message[0:500],       
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    db["site_feedback"].append(item)
+    save_db()
+    return jsonify(ok=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
