@@ -494,6 +494,16 @@ def global_stats():
         referrers=count_top(outside_clicks, "referrer"),
         shortened_sites=count_top(sites, "domain"),
     )
+@app.route("/api/db-check")
+def db_check():
+    if not UPSTASH_URL:
+        return jsonify(status="Upstash variables NOT found in Vercel")
+    try:
+        headers = {"Authorization": "Bearer " + UPSTASH_TOKEN}
+        answer = requests.post(UPSTASH_URL, headers=headers, json=["PING"], timeout=4)
+        return jsonify(status="Reached Upstash", reply=answer.text)
+    except Exception as e:
+        return jsonify(status="Could not connect", error=str(e))
 if __name__ == "__main__":
     app.run(debug=True)
 
