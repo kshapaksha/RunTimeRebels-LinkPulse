@@ -55,9 +55,14 @@ function copyLink() {
 async function sendFeedback(event) {
   event.preventDefault();
   const status = document.getElementById("fb-status");
-
+    
+  let typed = document.getElementById("fb-code").value.trim();
+  if (typed.endsWith("/")) {
+    typed = typed.slice(0, -1);
+  }
+  const code = typed.split("/").pop();
   const dataToSend = {
-    code: document.getElementById("fb-code").value.trim(),
+    code: code,
     type: document.getElementById("fb-type").value,
     rating: Number(document.getElementById("fb-rating").value),
     message: document.getElementById("fb-message").value,
