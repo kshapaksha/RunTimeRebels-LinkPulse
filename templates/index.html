@@ -125,8 +125,25 @@
             </div>
         </section>
 
-       
-        <section id="feedback" class="section container narrow">
+       <section id="feedback" class="section container narrow">
+    <h2>Rate LinkPulse</h2>
+
+    <form id="site-feedback-form" class="card form">
+        <select id="sf-rating">
+            <option value="5">★★★★★ Excellent</option>
+            <option value="4">★★★★ Good</option>
+            <option value="3">★★★ Okay</option>
+            <option value="2">★★ Poor</option>
+            <option value="1">★ Bad</option>
+        </select>
+
+        <textarea id="sf-message" rows="4" placeholder="What did you like or dislike about LinkPulse?" required></textarea>
+
+        <button class="btn" type="submit">Send feedback</button>
+        <p id="sf-status" class="muted"></p>
+    </form>
+</section>
+        <section id="report" class="section container narrow">
             <h2>Rate or report a link</h2>
 
             <form id="feedback-form" class="card form">
