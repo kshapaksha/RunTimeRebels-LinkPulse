@@ -1,65 +1,52 @@
 document.addEventListener("DOMContentLoaded", () => {
- 
-  const currentUserId = "global_fallback"; 
+  // 1. Get the current active user/owner name from local storage or form cookies
+  const currentOwner = localStorage.getItem("lp_owner") || "anonymous";
 
-  
-  fetch(`/api/analytics?mode=global`)
-    .then(res => res.json())
-    .then(globalData => {
-      
-     
-      document.getElementById("stats").classList.remove("hidden");
-      document.getElementById("s-total").innerText = globalData.totalClicks || 0;
-      document.getElementById("s-rating").innerText = "4.8";
-
-  
-      if (globalData.topCountries && globalData.topCountries.length > 0) {
-        document.getElementById("s-top-country").innerText = globalData.topCountries[0].name;
-      }
-      if (globalData.topReferrers && globalData.topReferrers.length > 0) {
-        document.getElementById("s-top-ref").innerText = globalData.topReferrers[0].name;
-      }
-
-     
-      const countriesBox = document.getElementById("b-countries");
-      countriesBox.innerHTML = globalData.topCountries.map(c => `
-        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-          <span>📍 ${c.name}</span>
-          <b>${c.count} clicks</b>
-        </div>
-      `).join('') || '<p class="muted">No data logged yet.</p>';
-
-      const referrersBox = document.getElementById("b-referrers");
-      referrersBox.innerHTML = globalData.topReferrers.map(r => `
-        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-          <span>🌐 ${r.name}</span>
-          <b>${r.count} hits</b>
-        </div>
-      `).join('') || '<p class="muted">No data logged yet.</p>';
+  // 2. Fetch the links directly from your native endpoint using the correct owner parameter
+  fetch(`/api/links?owner=${currentOwner}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to load dashboard data");
+      return res.json();
     })
-    .catch(err => console.error("Error reading global telemetry updates:", err));
-
-  
-  fetch(`/api/analytics?mode=personal&userId=${currentUserId}`)
-    .then(res => res.json())
-    .then(personalData => {
+    .then(data => {
       const linksBody = document.getElementById("links-body");
       const emptyMsg = document.getElementById("empty");
-      
-      if (!personalData|| personalData.links.length === 0) {
-        emptyMsg.classList.remove("hidden");
-      } else {
-        emptyMsg.classList.add("hidden");
-        linksBody.innerHTML = personalData.map(link => `
-          <tr>
-            <td><a href="/${link.id}" target="_blank">/${link.id}</a></td>
-            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${link.longUrl || 'Target Link'}</td>
-            <td><b>${link.clicks || 0}</b></td>
-            <td><span style="color:#10b981; font-weight:bold;">Active</span></td>
-            <td><button style="cursor:pointer; background:none; border:none;" onclick="navigator.clipboard.writeText(window.location.origin + '/${link.id}')">📋</button></td>
-          </tr>
-        `).join('');
+
+      // Verify if links exist
+      if (!data || data.length === 0) {
+        if (emptyMsg) emptyMsg.classList.remove("hidden");
+        linksBody.innerHTML = "";
+        return;
       }
+
+      if (emptyMsg) emptyMsg.classList.add("hidden");
+
+      // Populate your exact HTML table layout columns dynamically
+      linksBody.innerHTML = data.map(link => {
+        const shortUrl = window.location.origin + "/" + link.code;
+        const statusText = link.blocked ? "Blocked" : "Active";
+        const statusColor = link.blocked ? "#ef4444" : "#10b981";
+
+        return `
+          <tr>
+            <td><a href="/${link.code}" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 500;">/${link.code}</a></td>
+            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${link.url || 'Target Link'}</td>
+            <td><b>${link.clicks || 0}</b></td>
+            <td><span style="color: ${statusColor}; font-weight: bold;">${statusText}</span></td>
+            <td>
+              <button type="button" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;" onclick="navigator.clipboard.writeText('${shortUrl}')">
+                📋
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
     })
-    .catch(err => console.error("Error loading personal link slots:", err));
+    .catch(err => {
+      console.error("Dashboard connection error:", err);
+      const linksBody = document.getElementById("links-body");
+      if (linksBody) {
+        linksBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#ef4444;">Failed to sync with link pulse servers.</td></tr>`;
+      }
+    });
 });
