@@ -156,6 +156,7 @@ async function loadGlobalStats() {
   document.getElementById("g-clicks").textContent = stats.total_clicks;
   drawLeaderboard("g-countries", stats.countries);
   drawLeaderboard("g-referrers", stats.referrers);
+    drawLeaderboard("g-sites", stats.shortened_sites);
 }
 
 form.addEventListener("submit", makeShortLink);
