@@ -46,11 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const linksBody = document.getElementById("links-body");
       const emptyMsg = document.getElementById("empty");
       
-      if (!personalData.links || personalData.links.length === 0) {
+      if (!personalData|| personalData.links.length === 0) {
         emptyMsg.classList.remove("hidden");
       } else {
         emptyMsg.classList.add("hidden");
-        linksBody.innerHTML = personalData.links.map(link => `
+        linksBody.innerHTML = personalData.map(link => `
           <tr>
             <td><a href="/${link.id}" target="_blank">/${link.id}</a></td>
             <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${link.longUrl || 'Target Link'}</td>
