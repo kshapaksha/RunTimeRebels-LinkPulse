@@ -1,3 +1,10 @@
+if (!localStorage.getItem("lp_owner")) {
+    let username = prompt("Welcome to LinkPulse! Please enter a unique username for your account session:");
+    if (!username || username.trim() === "") {
+        username = "anonymous_" + Math.floor(1000 + Math.random() * 9000);
+    }
+    localStorage.setItem("lp_owner", username.trim());
+}
 
 function getOwner() {
   let owner = localStorage.getItem("lp_owner");
