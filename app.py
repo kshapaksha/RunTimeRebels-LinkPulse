@@ -431,6 +431,22 @@ def site_feedback():
     save_db()
     return jsonify(ok=True)
 
+@app.route("/api/global-stats")
+def global_stats():
+    all_clicks = db["clicks"]
+
+   
+    outside_clicks = []
+    for click in all_clicks:
+        if click["referrer"] != "Direct":
+            outside_clicks.append(click)
+
+    return jsonify(
+        total_links=len(db["links"]),
+        total_clicks=len(all_clicks),
+        countries=count_top(all_clicks, "country"),
+        referrers=count_top(outside_clicks, "referrer"),
+    )
 if __name__ == "__main__":
     app.run(debug=True)
 
