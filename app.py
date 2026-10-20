@@ -32,29 +32,69 @@ SAFE_BROWSING_KEY = os.environ.get("SAFE_BROWSING_KEY")
 
 
 
+UPSTASH_URL = os.environ.get("UPSTASH_REDIS_REST_URL")
+UPSTASH_TOKEN = os.environ.get("UPSTASH_REDIS_REST_TOKEN")
+
+
+def empty_db():
+    return {"links": {}, "clicks": [], "feedback": []}
+
+
 def load_db():
+    # Online database (used on Vercel)
+    if UPSTASH_URL:
+        try:
+            headers = {"Authorization": "Bearer " + UPSTASH_TOKEN}
+            answer = requests.post(UPSTASH_URL, headers=headers, json=["GET", "linkpulse"], timeout=4).json()
+            if answer.get("result"):
+                return json.loads(answer["result"])
+            return empty_db()       # nothing saved yet
+        except:
+            return None             # could not reach it, so don't touch our data
+
+    # No online database (running on your laptop): use the file
     if os.path.exists(DB_FILE):
         file = open(DB_FILE, "r")
         data = json.load(file)
         file.close()
         return data
-    else:
-        
-        return {"links": {}, "clicks": [], "feedback": []}
-
+    return empty_db()
 
 
 def save_db():
+    if UPSTASH_URL:
+        try:
+            headers = {"Authorization": "Bearer " + UPSTASH_TOKEN}
+            requests.post(UPSTASH_URL, headers=headers, json=["SET", "linkpulse", json.dumps(db)], timeout=4)
+        except:
+            pass
+        return
+
     try:
         file = open(DB_FILE, "w")
         json.dump(db, file, indent=2)
         file.close()
     except:
-        pass    
+        pass
 
 
 db = load_db()
-geo_cache = {}     
+if db == None:
+    db = empty_db()
+
+geo_cache = {}
+
+
+# Before every request, read the latest shared data
+@app.before_request
+def refresh_db():
+    global db
+    if request.path.startswith("/static"):
+        return
+    if UPSTASH_URL:
+        fresh = load_db()
+        if fresh != None:
+            db = fresh  
 
 
 # helper 
@@ -431,7 +471,6 @@ def site_feedback():
     save_db()
     return jsonify(ok=True)
 
-@app.route("/api/global-stats")
 @app.route("/api/global-stats")
 def global_stats():
     all_clicks = db["clicks"]
