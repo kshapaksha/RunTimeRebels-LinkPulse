@@ -516,6 +516,52 @@ def write_check():
         return jsonify(status="Write attempted", reply=answer.text)
     except Exception as e:
         return jsonify(status="Failed", error=str(e))
+@app.route('/api/analytics')
+def get_analytics():
+    import os
+    from upstash_redis import Redis
+    
+   
+    redis = Redis(
+        url=os.environ.get("UPSTASH_REDDIT_REDIS_REST_URL"), 
+        token=os.environ.get("UPSTASH_REDDIT_REDIS_REST_TOKEN")
+    )
+    
+    mode = request.args.get('mode', 'global')
+    user_id = request.args.get('userId') 
+
+    try:
+        if mode == 'personal':
+            if not user_id:
+                return jsonify({"error": "Unauthorized"}), 401
+            
+            
+            link_ids = redis.smembers(f"user:{user_id}:links")
+            personal_links = []
+            for lid in link_ids:
+                details = redis.hgetall(f"link:{lid}")
+                if details:
+                    details['id'] = lid
+                    personal_links.append(details)
+            return jsonify({"links": personal_links})
+            
+        else:
+            
+            total_clicks = redis.get("global:total_clicks") or 0
+            total_links = redis.get("global:total_links") or 0
+            
+           
+            top_countries = redis.zrevrange("global:top_countries", 0, 4, withscores=True)
+            top_referrers = redis.zrevrange("global:top_referrers", 0, 4, withscores=True)
+            
+            return jsonify({
+                "totalClicks": total_clicks,
+                "totalLinks": total_links,
+                "topCountries": [{"name": k, "count": v} for k, v in top_countries],
+                "topReferrers": [{"name": k, "count": v} for k, v in top_referrers]
+            })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
