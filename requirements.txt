@@ -1,4 +1,3 @@
-flask
-qrcode[pil]
-user-agents
+Flask
+gunicorn
 requests
