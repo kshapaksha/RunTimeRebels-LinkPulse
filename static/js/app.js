@@ -106,7 +106,60 @@ async function sendSiteFeedback(event) {
   }
 }
 
+// ---------- Live stats for the whole website ----------
+function drawLeaderboard(boxId, pairs) {
+  const box = document.getElementById(boxId);
+  box.innerHTML = "";
+
+  if (pairs.length === 0) {
+    box.textContent = "No data yet";
+    return;
+  }
+
+  // the biggest number gets the longest bar
+  let biggest = 0;
+  for (let i = 0; i < pairs.length; i++) {
+    if (pairs[i][1] > biggest) {
+      biggest = pairs[i][1];
+    }
+  }
+
+  for (let i = 0; i < pairs.length; i++) {
+    const row = document.createElement("div");
+    row.className = "bar-row";
+
+    const label = document.createElement("span");
+    label.textContent = pairs[i][0];
+
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    const fill = document.createElement("i");
+    fill.style.width = (pairs[i][1] / biggest) * 100 + "%";
+    bar.appendChild(fill);
+
+    const number = document.createElement("span");
+    number.textContent = pairs[i][1];
+
+    row.appendChild(label);
+    row.appendChild(bar);
+    row.appendChild(number);
+    box.appendChild(row);
+  }
+}
+
+
+async function loadGlobalStats() {
+  const response = await fetch("/api/global-stats");
+  const stats = await response.json();
+
+  document.getElementById("g-links").textContent = stats.total_links;
+  document.getElementById("g-clicks").textContent = stats.total_clicks;
+  drawLeaderboard("g-countries", stats.countries);
+  drawLeaderboard("g-referrers", stats.referrers);
+}
+
 form.addEventListener("submit", makeShortLink);
 copyButton.addEventListener("click", copyLink);
 feedbackForm.addEventListener("submit", sendFeedback);
 document.getElementById("site-feedback-form").addEventListener("submit", sendSiteFeedback);
+loadGlobalStats();
