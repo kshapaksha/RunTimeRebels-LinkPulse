@@ -158,6 +158,9 @@ async function loadGlobalStats() {
   drawLeaderboard("g-referrers", stats.referrers);
     drawLeaderboard("g-sites", stats.shortened_sites);
 }
+function getOwner() {
+  return localStorage.getItem("lp_owner") || "anonymous";
+}
 
 form.addEventListener("submit", makeShortLink);
 copyButton.addEventListener("click", copyLink);
