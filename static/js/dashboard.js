@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
  
-  const currentUserId = "user_123"; 
+  const currentUserId = "global_fallback"; 
 
   
   fetch(`/api/analytics?mode=global`)
