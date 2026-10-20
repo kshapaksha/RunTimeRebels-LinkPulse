@@ -472,16 +472,16 @@ def site_feedback():
     return jsonify(ok=True)
 
 
+```python
 @app.route("/api/global-stats")
 def global_stats():
     all_clicks = db["clicks"]
 
-   
     def get_platform(referrer):
         domain = (referrer or "").lower().strip()
         domain = domain.removeprefix("www.")
 
-        if domain == "" or domain == "direct":
+        if domain in ("", "direct"):
             return "Direct"
         if "google." in domain:
             return "Google"
@@ -506,11 +506,9 @@ def global_stats():
 
         return domain
 
-    
     referral_counts = {}
     for click in all_clicks:
         platform = get_platform(click.get("referrer", "Direct"))
-
         if platform != "Direct":
             referral_counts[platform] = referral_counts.get(platform, 0) + 1
 
@@ -520,19 +518,37 @@ def global_stats():
         reverse=True
     )[:5]
 
-    sites = []
-    for code in db["links"]:
-        site = urlparse(db["links"][code]["url"]).netloc
-        site = site.replace("www.", "")
-        sites.append({"domain": site})
+    site_counts = {}
+    for link in db["links"].values():
+        destination = link.get("url", "")
+        if not destination:
+            continue
+
+        domain = urlparse(destination).netloc.lower()
+        domain = domain.removeprefix("www.")
+
+        if not domain:
+            continue
+
+        site_counts[domain] = site_counts.get(domain, 0) + 1
+
+    shortened_sites = sorted(
+        [
+            {"domain": domain, "count": count}
+            for domain, count in site_counts.items()
+        ],
+        key=lambda item: item["count"],
+        reverse=True
+    )[:5]
 
     return jsonify(
         total_links=len(db["links"]),
         total_clicks=len(all_clicks),
         countries=count_top(all_clicks, "country"),
         referrers=referrers,
-        shortened_sites=count_top(sites, "domain"),
+        shortened_sites=shortened_sites,
     )
+
 
 @app.route("/api/db-check")
 def db_check():
