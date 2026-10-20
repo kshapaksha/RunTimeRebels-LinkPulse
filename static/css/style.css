@@ -1,7 +1,3 @@
-/* ========================================
-   LINKPULSE — PREMIUM EMERALD DESIGN
-======================================== */
-
 :root {
     --bg: #F6F9F6;
     --card: #FFFFFF;
@@ -97,10 +93,6 @@ textarea {
     font-size: 14px;
 }
 
-/* ========================================
-   NAVBAR
-======================================== */
-
 .nav {
     position: sticky;
     top: 0;
@@ -150,9 +142,6 @@ textarea {
     color: var(--accent);
 }
 
-/* ========================================
-   BUTTONS
-======================================== */
 
 .btn {
     display: inline-flex;
@@ -213,9 +202,6 @@ textarea {
     box-shadow: none;
 }
 
-/* ========================================
-   INPUTS
-======================================== */
 
 input,
 select,
@@ -254,9 +240,6 @@ textarea:focus {
         0 0 0 4px rgba(8, 127, 91, 0.09);
 }
 
-/* ========================================
-   HERO SECTION
-======================================== */
 
 .hero {
     position: relative;
@@ -349,9 +332,6 @@ textarea:focus {
     line-height: 1.85;
 }
 
-/* ========================================
-   URL SHORTENER BOX
-======================================== */
 
 .shorten-box,
 .result {
@@ -415,9 +395,7 @@ textarea:focus {
     border-radius: 12px;
 }
 
-/* ========================================
-   SECTIONS
-======================================== */
+
 
 .section {
     padding: 82px 26px;
@@ -436,9 +414,7 @@ textarea:focus {
     margin-bottom: 42px;
 }
 
-/* ========================================
-   FEATURE CARDS
-======================================== */
+
 
 .grid {
     display: grid;
@@ -512,9 +488,7 @@ textarea:focus {
     margin-bottom: 14px;
 }
 
-/* ========================================
-   FEEDBACK FORM
-======================================== */
+
 
 .form {
     display: grid;
@@ -531,9 +505,6 @@ textarea:focus {
     min-width: 140px;
 }
 
-/* ========================================
-   FOOTER
-======================================== */
 
 .footer {
     border-top: 1px solid var(--line);
@@ -550,9 +521,6 @@ textarea:focus {
     margin-top: 45px;
 }
 
-/* ========================================
-   DASHBOARD
-======================================== */
 
 .page-title {
     padding: 48px 0 24px;
@@ -642,10 +610,7 @@ main.container>.card {
     background: #FFFBEB;
     border-color: #FDE68A;
 }
-
-/* ========================================
-   ANALYTICS
-======================================== */
+/
 
 .stat-row {
     display: grid;
@@ -721,10 +686,6 @@ main.container>.card {
             #34D399);
 }
 
-/* ========================================
-   UNLOCK PAGE
-======================================== */
-
 .center-box {
     max-width: 430px;
 
@@ -742,19 +703,12 @@ main.container>.card {
     box-shadow: var(--shadow);
 }
 
-/* ========================================
-   ACCESSIBILITY
-======================================== */
 
 .btn:focus-visible,
 a:focus-visible {
     outline: 3px solid #34D399;
     outline-offset: 3px;
 }
-
-/* ========================================
-   RESPONSIVE DESIGN
-======================================== */
 
 @media (max-width: 900px) {
     .nav-links {
@@ -853,9 +807,6 @@ a:focus-visible {
     }
 }
 
-/* ========================================
-   ANIMATIONS
-======================================== */
 
 .card::before {
     content: "";
@@ -898,9 +849,6 @@ a:focus-visible {
     }
 }
 
-/* ========================================
-   THEME BUTTON
-======================================== */
 
 .theme-btn {
     background: var(--card);
@@ -917,10 +865,6 @@ a:focus-visible {
     border-color: var(--accent);
 }
 
-/* ========================================
-   DARK MODE FIXES
-   (these replace the hard-coded light colors)
-======================================== */
 
 [data-theme="dark"] .nav {
     background: rgba(11, 18, 14, 0.9);
