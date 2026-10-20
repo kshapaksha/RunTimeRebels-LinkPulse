@@ -70,3 +70,9 @@ Verify Password / Expiry
 Update Click Count
       ↓
 Redirect to Original URL
+
+## Deployment
+
+LinkPulse is deployed on Render using Flask and Gunicorn. The project is hosted on GitHub, and Upstash Redis is used for persistent data storage.
+
+The live application supports URL shortening, QR code generation, and link analytics.
