@@ -109,38 +109,48 @@ async function sendSiteFeedback(event) {
 }
 
 // ---------- Live stats for the whole website ----------
+
 function drawLeaderboard(boxId, pairs) {
   const box = document.getElementById(boxId);
+  if (!box) return;
+
   box.innerHTML = "";
 
-  if (pairs.length === 0) {
+  if (!Array.isArray(pairs) || pairs.length === 0) {
     box.textContent = "No data yet";
     return;
   }
 
-  // the biggest number gets the longest bar
-  let biggest = 0;
-  for (let i = 0; i < pairs.length; i++) {
-    if (pairs[i][1] > biggest) {
-      biggest = pairs[i][1];
+  // Accept both [name, count] pairs and {domain, count} objects.
+  const entries = pairs.map(item => {
+    if (Array.isArray(item)) {
+      return [item[0], Number(item[1]) || 0];
     }
-  }
 
-  for (let i = 0; i < pairs.length; i++) {
+    return [
+      item.domain || item.name || item.referrer || item.country || "",
+      Number(item.count) || 0
+    ];
+  });
+
+  const biggest = Math.max(...entries.map(item => item[1]));
+
+  for (const [name, count] of entries) {
     const row = document.createElement("div");
     row.className = "bar-row";
 
     const label = document.createElement("span");
-    label.textContent = pairs[i][0];
+    label.textContent = name;
 
     const bar = document.createElement("div");
     bar.className = "bar";
+
     const fill = document.createElement("i");
-    fill.style.width = (pairs[i][1] / biggest) * 100 + "%";
+    fill.style.width = biggest > 0 ? (count / biggest) * 100 + "%" : "0%";
     bar.appendChild(fill);
 
     const number = document.createElement("span");
-    number.textContent = pairs[i][1];
+    number.textContent = count;
 
     row.appendChild(label);
     row.appendChild(bar);
@@ -148,6 +158,7 @@ function drawLeaderboard(boxId, pairs) {
     box.appendChild(row);
   }
 }
+
 
 
 async function loadGlobalStats() {
