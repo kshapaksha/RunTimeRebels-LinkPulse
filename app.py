@@ -471,15 +471,54 @@ def site_feedback():
     save_db()
     return jsonify(ok=True)
 
+
 @app.route("/api/global-stats")
 def global_stats():
     all_clicks = db["clicks"]
 
+   
+    def get_platform(referrer):
+        domain = (referrer or "").lower().strip()
+        domain = domain.removeprefix("www.")
+
+        if domain == "" or domain == "direct":
+            return "Direct"
+        if "google." in domain:
+            return "Google"
+        if "whatsapp." in domain or domain == "wa.me":
+            return "WhatsApp"
+        if "linkedin.com" in domain:
+            return "LinkedIn"
+        if domain in ("t.co", "twitter.com", "x.com") or domain.endswith(".twitter.com"):
+            return "X / Twitter"
+        if "facebook.com" in domain or domain == "fb.com":
+            return "Facebook"
+        if "instagram.com" in domain:
+            return "Instagram"
+        if "t.me" in domain or "telegram.org" in domain:
+            return "Telegram"
+        if "youtube.com" in domain or domain == "youtu.be":
+            return "YouTube"
+        if "reddit.com" in domain:
+            return "Reddit"
+        if "github.com" in domain:
+            return "GitHub"
+
+        return domain
+
     
-    outside_clicks = []
+    referral_counts = {}
     for click in all_clicks:
-        if click["referrer"] != "Direct":
-            outside_clicks.append(click)
+        platform = get_platform(click.get("referrer", "Direct"))
+
+        if platform != "Direct":
+            referral_counts[platform] = referral_counts.get(platform, 0) + 1
+
+    referrers = sorted(
+        [[name, count] for name, count in referral_counts.items()],
+        key=lambda item: item[1],
+        reverse=True
+    )[:5]
 
     sites = []
     for code in db["links"]:
@@ -491,9 +530,10 @@ def global_stats():
         total_links=len(db["links"]),
         total_clicks=len(all_clicks),
         countries=count_top(all_clicks, "country"),
-        referrers=count_top(outside_clicks, "referrer"),
+        referrers=referrers,
         shortened_sites=count_top(sites, "domain"),
     )
+
 @app.route("/api/db-check")
 def db_check():
     if not UPSTASH_URL:
