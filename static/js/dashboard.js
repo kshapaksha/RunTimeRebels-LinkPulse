@@ -1,152 +1,65 @@
-const owner = getOwner();
+document.addEventListener("DOMContentLoaded", () => {
+ 
+  const currentUserId = "user_123"; 
 
+  
+  fetch(`/api/analytics?mode=global`)
+    .then(res => res.json())
+    .then(globalData => {
+      
+     
+      document.getElementById("stats").classList.remove("hidden");
+      document.getElementById("s-total").innerText = globalData.totalClicks || 0;
+      document.getElementById("s-rating").innerText = "4.8";
 
-function makeCell(text, className) {
-    const cell = document.createElement("td");
-    cell.textContent = text;
-    if (className) {
-        cell.className = className;
-    }
-    return cell;
-}
+  
+      if (globalData.topCountries && globalData.topCountries.length > 0) {
+        document.getElementById("s-top-country").innerText = globalData.topCountries[0].name;
+      }
+      if (globalData.topReferrers && globalData.topReferrers.length > 0) {
+        document.getElementById("s-top-ref").innerText = globalData.topReferrers[0].name;
+      }
 
+     
+      const countriesBox = document.getElementById("b-countries");
+      countriesBox.innerHTML = globalData.topCountries.map(c => `
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+          <span>📍 ${c.name}</span>
+          <b>${c.count} clicks</b>
+        </div>
+      `).join('') || '<p class="muted">No data logged yet.</p>';
 
-async function loadLinks() {
-    const response = await fetch("/api/links?owner=" + owner);
-    const links = await response.json();
+      const referrersBox = document.getElementById("b-referrers");
+      referrersBox.innerHTML = globalData.topReferrers.map(r => `
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+          <span>🌐 ${r.name}</span>
+          <b>${r.count} hits</b>
+        </div>
+      `).join('') || '<p class="muted">No data logged yet.</p>';
+    })
+    .catch(err => console.error("Error reading global telemetry updates:", err));
 
-    const tableBody = document.getElementById("links-body");
-    const emptyMessage = document.getElementById("empty");
-    tableBody.innerHTML = "";
-
-    if (links.length === 0) {
-        emptyMessage.classList.remove("hidden");
-    } else {
-        emptyMessage.classList.add("hidden");
-    }
-
-    for (let i = 0; i < links.length; i++) {
-        const link = links[i];
-        const shortUrl = location.origin + "/" + link.code;
-        const row = document.createElement("tr");
-
-        row.appendChild(makeCell(shortUrl));
-        row.appendChild(makeCell(link.url, "long"));
-        row.appendChild(makeCell(link.clicks));
-
-        const statusCell = document.createElement("td");
-        const badge = document.createElement("span");
-        let statusText = link.status;
-        if (link.protected) {
-            statusText = statusText + " · 🔒";
-        }
-        if (link.status === "Active") {
-            badge.className = "badge ok";
-        } else {
-            badge.className = "badge bad";
-        }
-        badge.textContent = statusText;
-        statusCell.appendChild(badge);
-        row.appendChild(statusCell);
-
-
-        const buttonCell = document.createElement("td");
-        const button = document.createElement("button");
-        button.className = "btn btn-small btn-ghost";
-        button.textContent = "Analytics";
-        button.addEventListener("click", function () {
-            showStats(link.code, shortUrl);
-        });
-        buttonCell.appendChild(button);
-        row.appendChild(buttonCell);
-
-        tableBody.appendChild(row);
-    }
-}
-
-function drawBars(boxId, pairs) {
-    const box = document.getElementById(boxId);
-    box.innerHTML = "";
-
-    if (pairs.length === 0) {
-        box.textContent = "No data yet";
-        return;
-    }
-
-
-    let biggest = 0;
-    for (let i = 0; i < pairs.length; i++) {
-        if (pairs[i][1] > biggest) {
-            biggest = pairs[i][1];
-        }
-    }
-
-
-    for (let i = 0; i < pairs.length; i++) {
-        const name = pairs[i][0];
-        const count = pairs[i][1];
-
-        const row = document.createElement("div");
-        row.className = "bar-row";
-
-        const label = document.createElement("span");
-        label.textContent = name;
-
-        const bar = document.createElement("div");
-        bar.className = "bar";
-        const fill = document.createElement("i");
-        fill.style.width = (count / biggest) * 100 + "%";
-        bar.appendChild(fill);
-
-        const number = document.createElement("span");
-        number.textContent = count;
-
-        row.appendChild(label);
-        row.appendChild(bar);
-        row.appendChild(number);
-        box.appendChild(row);
-    }
-}
-
-
-
-async function showStats(code, shortUrl) {
-    const response = await fetch("/api/stats/" + code + "?owner=" + owner);
-    const stats = await response.json();
-
-    document.getElementById("stats").classList.remove("hidden");
-    document.getElementById("stats-title").textContent = "Analytics for " + shortUrl;
-    document.getElementById("s-total").textContent = stats.total;
-
-
-    let topCountry = "-";
-    if (stats.countries.length > 0) {
-        topCountry = stats.countries[0][0];
-    }
-    document.getElementById("s-top-country").textContent = topCountry;
-
-
-    let topReferrer = "-";
-    if (stats.referrers.length > 0) {
-        topReferrer = stats.referrers[0][0];
-    }
-    document.getElementById("s-top-ref").textContent = topReferrer;
-
-    let rating = "-";
-    if (stats.avg_rating !== null) {
-        rating = stats.avg_rating;
-    }
-    document.getElementById("s-rating").textContent = rating;
-
-
-    drawBars("b-countries", stats.countries);
-    drawBars("b-referrers", stats.referrers);
-    drawBars("b-devices", stats.devices);
-    drawBars("b-browsers", stats.browsers);
-    drawBars("b-days", stats.days);
-
-    document.getElementById("stats").scrollIntoView({ behavior: "smooth" });
-}
-
-
-loadLinks();
+  
+  fetch(`/api/analytics?mode=personal&userId=${currentUserId}`)
+    .then(res => res.json())
+    .then(personalData => {
+      const linksBody = document.getElementById("links-body");
+      const emptyMsg = document.getElementById("empty");
+      
+      if (!personalData.links || personalData.links.length === 0) {
+        emptyMsg.classList.remove("hidden");
+      } else {
+        emptyMsg.classList.add("hidden");
+        linksBody.innerHTML = personalData.links.map(link => `
+          <tr>
+            <td><a href="/${link.id}" target="_blank">/${link.id}</a></td>
+            <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${link.longUrl || 'Target Link'}</td>
+            <td><b>${link.clicks || 0}</b></td>
+            <td><span style="color:#10b981; font-weight:bold;">Active</span></td>
+            <td><button style="cursor:pointer; background:none; border:none;" onclick="navigator.clipboard.writeText(window.location.origin + '/${link.id}')">📋</button></td>
+          </tr>
+        `).join('');
+      }
+    })
+    .catch(err => console.error("Error loading personal link slots:", err));
+});
