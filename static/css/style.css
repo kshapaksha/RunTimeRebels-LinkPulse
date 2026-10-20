@@ -1,40 +1,42 @@
+
 :root {
-    --bg: #F6F9F6;
+    --bg: #F5FAFF;
     --card: #FFFFFF;
-    --line: #E3EBE4;
+    --line: #E1EBF5;
 
-    --text: #14251A;
-    --muted: #6B7C70;
+    --text: #263746;
+    --muted: #7A8B9B;
 
-    --accent: #087F5B;
-    --accent2: #34D399;
-    --accent-light: #E7F7EE;
+    --accent: #59b0ee;
+    --accent2: #A9D8F5;
+    --accent-light: #EDF7FF;
 
-    --shadow:
-        0 12px 35px rgba(19, 55, 32, 0.07);
+    --shadow: 0 12px 35px rgba(87, 135, 170, 0.08);
 }
 
-[data-theme="dark"] {
-    --bg: #0B120E;
-    --card: #121C16;
-    --line: #22312A;
-    --text: #E8F3EC;
-    --muted: #8FA596;
-    --accent: #34D399;
-    --accent2: #10B981;
-    --accent-light: #123325;
-    --shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
 
-    --nav-bg: rgba(11, 18, 14, 0.9);
-    --input-bg: #0F1813;
-    --input-alt: #0F1813;
-    --input-border: #2A3B32;
-    --ghost-border: #2A4A3A;
-    --pill-border: #1F4A36;
-    --hover-line: #2F6B4F;
-    --table-head: #16241C;
-    --table-hover: #162219;
-    --bar-track: #1C2B22;
+
+[data-theme="dark"] {
+    --bg: #060606;
+    --card: #172e3f;
+    --line: #2B3B48;
+    --text: #E8F2FA;
+    --muted: #A0B4C5;
+    --accent: #8CC9F0;
+    --accent2: #B9DDF5;
+    --accent-light: #20394A;
+    --shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+
+    --nav-bg: rgba(28, 52, 73, 0.92);
+    --input-bg: #4a4a4a;
+    --input-alt: #575757;
+    --input-border: #354958;
+    --ghost-border: #45657B;
+    --pill-border: #36576C;
+    --hover-line: #527D99;
+    --table-head: #202F3B;
+    --table-hover: #202F3B;
+    --bar-track: #2B3B48;
 }
 
 * {
@@ -150,8 +152,8 @@ textarea {
     gap: 8px;
 
     background: linear-gradient(135deg,
-            #087F5B,
-            #11966B);
+            hsl(204, 56%, 55%),
+            #33adf9);
 
     color: #FFFFFF;
     border: 1px solid transparent;
@@ -174,12 +176,31 @@ textarea {
         background 0.22s ease;
 }
 
+
 .btn:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 9px 22px rgba(8, 127, 91, 0.24);
+    box-shadow: 0 9px 22px rgba(120, 185, 232, 0.24);
 }
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #B9DDF5;
+    box-shadow: 0 12px 35px rgba(87, 135, 170, 0.10);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #78B9E8, #C5E5FA);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+}
+
 
 .btn:active {
     transform: translateY(0);
@@ -190,12 +211,11 @@ textarea {
     font-size: 13px;
 }
 
-.btn-ghost {
-    background: #FFFFFF;
-    color: var(--accent);
-    border: 1px solid #BBDCC9;
+.btn-ghost:hover {
+    background: #EDF7FF;
     box-shadow: none;
 }
+
 
 .btn-ghost:hover {
     background: var(--accent-light);
@@ -265,8 +285,8 @@ textarea:focus {
     transform: translateX(-50%);
 
     background: radial-gradient(ellipse,
-            rgba(52, 211, 153, 0.15),
-            rgba(52, 211, 153, 0.035) 45%,
+            rgba(120, 185, 232, 0.15),
+            rgba(120, 185, 232, 0.035) 45%,
             transparent 72%);
 
     pointer-events: none;
@@ -280,12 +300,12 @@ textarea:focus {
 
     padding: 7px 15px;
 
-    border: 1px solid #CBE9D5;
+    border: 1px solid #CBE9F5;
     border-radius: 999px;
 
     background: rgba(231, 247, 238, 0.9);
 
-    color: #087F5B;
+    color: #78B9E8;
 
     font-size: 12px;
     font-weight: 750;
@@ -311,9 +331,9 @@ textarea:focus {
     font-style: normal;
 
     background: linear-gradient(90deg,
-            #087F5B 10%,
-            #10A875 55%,
-            #34D399 100%);
+            #78B9E8 10%,
+            #59b0ee 55%,
+            #33adf9 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -453,7 +473,7 @@ textarea:focus {
 .card:hover {
     transform: translateY(-5px);
 
-    border-color: #A8D9B8;
+    border-color: #B9DDF5;
 
     box-shadow: var(--shadow);
 }
@@ -594,8 +614,8 @@ main.container>.card {
 }
 
 .badge.ok {
-    color: #087F5B;
-    background: #E7F7EE;
+    color: #78B9E8;
+    background: #EDF7FF;
     border-color: #C5EBD2;
 }
 
@@ -682,8 +702,8 @@ main.container>.card {
     border-radius: 999px;
 
     background: linear-gradient(90deg,
-            #087F5B,
-            #34D399);
+            #59b0ee,
+            #a9d8f5);
 }
 
 .center-box {
