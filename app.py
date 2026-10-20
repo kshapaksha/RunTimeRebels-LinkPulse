@@ -45,9 +45,12 @@ def load_db():
 
 
 def save_db():
-    file = open(DB_FILE, "w")
-    json.dump(db, file, indent=2)
-    file.close()
+    try:
+        file = open(DB_FILE, "w")
+        json.dump(db, file, indent=2)
+        file.close()
+    except:
+        pass    
 
 
 db = load_db()
