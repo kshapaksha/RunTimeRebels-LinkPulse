@@ -1,5 +1,6 @@
 Flask
 gunicorn
 requests
+redis
 qrcode[pil]
 user-agents
