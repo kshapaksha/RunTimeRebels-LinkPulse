@@ -472,7 +472,7 @@ def site_feedback():
     return jsonify(ok=True)
 
 
-```python
+
 @app.route("/api/global-stats")
 def global_stats():
     all_clicks = db["clicks"]
