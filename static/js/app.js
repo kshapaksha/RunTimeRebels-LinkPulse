@@ -82,8 +82,31 @@ async function sendFeedback(event) {
   }
 }
 
+async function sendSiteFeedback(event) {
+  event.preventDefault();
+  const status = document.getElementById("sf-status");
 
+  const dataToSend = {
+    rating: Number(document.getElementById("sf-rating").value),
+    message: document.getElementById("sf-message").value.trim(),
+  };
+
+  const response = await fetch("/api/site-feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dataToSend),
+  });
+  const result = await response.json();
+
+  if (response.ok) {
+    status.textContent = "Thank you for your feedback!";
+    document.getElementById("sf-message").value = "";
+  } else {
+    status.textContent = result.error;
+  }
+}
 
 form.addEventListener("submit", makeShortLink);
 copyButton.addEventListener("click", copyLink);
 feedbackForm.addEventListener("submit", sendFeedback);
+document.getElementById("site-feedback-form").addEventListener("submit", sendSiteFeedback);
