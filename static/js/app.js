@@ -1,3 +1,5 @@
+function getOwner() { return localStorage.getItem("lp_owner") || "anonymous"; }
+
 const form = document.getElementById("shorten-form");
 const errorBox = document.getElementById("error");
 const resultBox = document.getElementById("result");
